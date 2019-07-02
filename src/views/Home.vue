@@ -10,8 +10,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
-
 export default {
   name: 'home',
   components: {},
@@ -36,7 +34,6 @@ $headbar-height = 60px;
   bottom: 0;
   left: 0;
   right: 0;
-  padding-top: $headbar-height;
   background-size: 100% 100%;
 }
 

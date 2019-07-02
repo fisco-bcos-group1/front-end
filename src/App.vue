@@ -21,7 +21,7 @@ export default {
   padding: 0px;
 }
 .rv {
-  margin-top: 60px;
+  padding-top: 60px;
 }
 
 #app {
