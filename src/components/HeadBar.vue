@@ -10,7 +10,7 @@
       <div :class="calOption(2)" @click="clickOption(2)">音乐人</div>
       <div :class="calOption(3)" @click="clickOption(3)">企业</div>
       <div :class="calOption(4)" @click="clickOption(4)">仲裁区</div>
-      <div :class="calOption(5)" @click="clickOption(5)">{{showCenter}}</div>
+      <div :class="calOption(5)" @click="clickOption(5)">{{ showCenter }}</div>
     </div>
   </div>
 </template>
@@ -55,7 +55,7 @@ export default {
           break
         case 5:
           if (this.$store.state.isLogin) this.$router.push('/center/info')
-          else this.$router.push('/loginoption')
+          else this.$router.push('/login')
           break
         default:
           break

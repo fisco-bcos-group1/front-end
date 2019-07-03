@@ -27,7 +27,7 @@ export default new Router({
       component: () => import('./views/Arbitration.vue')
     },
     {
-      path: '/loginoption',
+      path: '/login',
       meta: { idx: 5 },
       component: () => import('./views/login/Options.vue')
     },
