@@ -56,11 +56,11 @@ export default new Router({
           meta: { idx: 5, side: 3 },
           component: () => import('./components/side/Publish.vue')
         },
-        {
-          path: '/center/transfer',
-          meta: { idx: 5, side: 4 },
-          component: () => import('./components/side/Transfer.vue')
-        },
+        // {
+        //   path: '/center/transfer',
+        //   meta: { idx: 5, side: 4 },
+        //   component: () => import('./components/side/Transfer.vue')
+        // },
         {
           path: '/center/apply',
           meta: { idx: 5, side: 5 },

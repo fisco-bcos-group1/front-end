@@ -26,7 +26,14 @@
       <div class="apply-btn" @click="clickApply">申请授权</div>
     </div>
 
-    <el-dialog title="授 权" :visible.sync="dialogVisible" width="610px" center append-to-body>
+    <el-dialog
+      title="授 权"
+      :visible.sync="dialogVisible"
+      width="610px"
+      center
+      append-to-body
+      top="20px"
+    >
       <div class="dialog-cnt">
         <div class="box">
           <div class="title">授权歌曲信息</div>
@@ -107,7 +114,7 @@ export default {
   components: {},
   data() {
     return {
-      dialogVisible: true,
+      dialogVisible: false,
       backgroundDiv: {
         backgroundImage: 'url(' + require('../assets/img/background.jpg') + ')'
       },

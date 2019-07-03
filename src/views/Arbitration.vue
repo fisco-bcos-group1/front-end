@@ -161,7 +161,7 @@ export default {
       // to do
     },
     clickLogin() {
-      //to do
+      // to do
       this.loginVisible = false
     },
     clickRegister() {

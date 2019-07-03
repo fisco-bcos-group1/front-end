@@ -69,7 +69,7 @@
       </div>
     </div>
     <div class="btn-box">
-      <el-button @click="submitMusic" plain>确认登记</el-button>
+      <el-button type="primary" @click="submitMusic" plain>确认登记</el-button>
     </div>
     <el-dialog title="文件的SHA512值" :visible.sync="dialogVisible" width="30%">
       <span>{{fileHash}}</span>
@@ -145,7 +145,7 @@ export default {
   border: 1px solid #e9e9e9;
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  margin: 40px auto;
+  margin: 30px auto;
   padding: 10px 36px;
 
   .box {

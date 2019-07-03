@@ -12,7 +12,7 @@ const companyList = [
   { title: '授权订单', path: '/center/order' },
   { title: '版权音乐', path: '/center/musics' },
   { title: '登记版权', path: '/center/publish' },
-  { title: '版权转让', path: '/center/transfer' },
+  { title: '版权转让', path: '/center/musics' },
   { title: '授权申请', path: '/center/apply' },
   { title: '版权共享', path: '/center/share' }
 ]
@@ -22,7 +22,7 @@ const musicianList = [
   { title: '授权订单', path: '/center/order' },
   { title: '版权音乐', path: '/center/musics' },
   { title: '登记版权', path: '/center/publish' },
-  { title: '版权转让', path: '/center/transfer' },
+  { title: '版权转让', path: '/center/musics' },
   { title: '授权申请', path: '/center/apply' }
 ]
 
@@ -84,6 +84,8 @@ export default {
 .option {
   font-size: 1.25rem;
   line-height: 60px;
+  cursor: pointer;
+  noselect();
 
   &:hover {
     background-color: #eee;
