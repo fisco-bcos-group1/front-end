@@ -134,6 +134,33 @@ export default {
         date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
       this.form.publish_time = datestr
       console.log('submit', this.form.publish_time)
+
+      if (
+        this.$store.state.privateKey &&
+        this.$store.state.isLogin &&
+        this.$store.state.userType === 'musician'
+      ) {
+        var req = {
+          privateKey: this.$store.state.privateKey,
+          bin: this.fileHash,
+          mname: this.form.music_name,
+          alltime:
+            this.form.record_time +
+            '#' +
+            this.form.publish_time +
+            '#' +
+            this.form.publish_time
+        }
+        this.axios.post('/api/pubilsh', req).then(res => {
+          if (res.data.success === 1) {
+            this.$message.success('登记成功')
+          } else {
+            this.$message.error('登记失败 ' + res.data.message)
+          }
+        })
+      } else {
+        this.$message.error('请先认证')
+      }
     }
   }
 }

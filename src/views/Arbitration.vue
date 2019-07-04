@@ -146,33 +146,35 @@ export default {
       showLogin: true,
       privateKey: '',
       music: {
-        name: 'AASA',
-        publish_time: 'ASDASD',
-        record_time: 'ASDASDA',
-        author: 'ASDASD',
-        owner: 'ASDASD',
-        code: 'AASDASDA',
-        address: 'ASDASDA',
-        phone: 'SDASDASDASD',
-        email: 'ASDASDASDA'
+        name: ' ',
+        publish_time: ' ',
+        record_time: ' ',
+        author: ' ',
+        owner: ' ',
+        code: ' ',
+        address: ' ',
+        phone: ' ',
+        email: ' '
       },
       register: {
         name: '',
         location: '',
         phone: '',
-        email: ''
+        email: '',
+        privateKey: this.$store.state.privateKey
       },
       more: {
-        name: 'XXX机构',
-        location: 'XXX',
-        phone: 'XXXXX'
+        name: ' ',
+        location: ' ',
+        phone: ' '
       }
     }
   },
   computed: {
     isLogin() {
-      if (this.$store.state.isLogin && this.$store.state.userType === 'judge')
+      if (this.$store.state.isLogin && this.$store.state.userType === 'judge') {
         return true
+      }
       return false
     }
   },
@@ -191,14 +193,70 @@ export default {
     },
     clickSearch() {
       // to do
-      if (!this.isLogin) this.$message.error('请先登录')
+      if (!this.isLogin) {
+        this.$message.error('请先登录')
+        return
+      }
+      this.axios
+        .post('/api/judge/search', {
+          musicname: this.musicName,
+          singer: this.musicAuthor,
+          privateKey: this.$store.state.privateKey
+        })
+        .then(e => {
+          let res = e.data
+          if (res.success === 0) {
+            this.$message.error('无结果')
+            return
+          }
+          let music = res.data.music
+          let user = res.data.user
+          this.music.name = music.name
+          this.music.author = music.singer
+          this.music.owner = user.name
+          this.music.code = user.id
+          this.music.address = user.location
+          this.music.phone = user.phone
+          this.music.email = user.email
+        })
     },
     clickLogin() {
       // to do
+      this.axios
+        .post('/api/login', { privateKey: this.privateKey })
+        .then(res => {
+          res = res.data
+          if (res.success === 0) {
+            this.$message.error('私钥错误')
+          } else {
+            let user = res.data
+            // localStorage.setItem('privateKey', this.pwd)
+            // localStorage.setItem('userType', user.kind)
+            // localStorage.setItem('isLogin', true)
+            // localStorage.setItem('user', user)
+            this.$store.commit('setUserType', user.kind)
+            this.$store.commit('setUser', user)
+            this.more.name = user.name
+            this.more.location = user.location
+            this.more.phone = user.phone
+            this.$message.success('登录成功')
+          }
+        })
+        .catch(e => {
+          this.$message.error('私钥错误')
+        })
       this.loginVisible = false
     },
     clickRegister() {
       // to do
+      this.axios.post('/api/judge/apply', this.register).then(e => {
+        let res = e.data
+        if (res.success === 1) {
+          this.$message.success('认证成功')
+        } else {
+          this.$message.error('认证失败')
+        }
+      })
       this.registerVisible = false
     }
   }

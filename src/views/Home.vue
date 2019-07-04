@@ -122,26 +122,73 @@ export default {
       musicName: '',
       musicAuthor: '',
       music: {
+        bin: '',
         name: 'XXX',
         author: 'XXX',
         owner: 'XXX',
-        purpose: 'A', // 购买用途
-        address: '2', // 授权地域
-        period: '34', // 授权期限
-        desc: '4', // 其他说明
-        asker: '5', // 授权人姓名
-        phone: '6', // 联系电话
-        price: '7' // 价格
+        alltime: '',
+        purpose: '', // 购买用途
+        address: '', // 授权地域
+        period: '', // 授权期限
+        desc: '', // 其他说明
+        asker: '', // 授权人姓名
+        phone: '', // 联系电话
+        price: '' // 价格
       }
     }
   },
   methods: {
     clickSearch() {
       // To do
-      this.isShow = true
+      if (this.$store.state.isLogin) {
+        this.axios
+          .post('/api/search', {
+            privateKey: this.$store.state.privateKey,
+            mName: this.musicName,
+            singer: this.musicAuthor
+          })
+          .then(e => {
+            let res = e.data
+            let music = res.data
+            if (res.success === 1 && music.valid) {
+              this.isShow = true
+              this.music.bin = music.bin
+              this.music.name = music.mName
+              this.music.author = music.singer
+              this.music.owner = music.owner
+              this.music.alltime = music.alltime
+              console.log(music)
+            } else {
+              this.$message.info('无结果')
+            }
+          })
+      } else {
+        this.$message.error('请先登录')
+      }
     },
     clickApply() {
       // To do
+      let arr = [
+        this.music.asker,
+        this.music.phone,
+        this.music.purpose,
+        this.music.address,
+        this.music.period,
+        this.music.desc,
+        this.music.price
+      ]
+      let req = {
+        music:
+          this.music.name + '#' + this.music.author + '#' + this.music.alltime,
+        to: this.music.owner,
+        info: arr.join('#'),
+        privateKey: this.$store.state.privateKey
+      }
+      this.axios.post('/api/apply', req).then(e => {
+        let res = e.data
+        if (res.success === 1) this.$message.success(res.message)
+        else this.$message.error(res.message)
+      })
       this.dialogVisible = true
     }
   }

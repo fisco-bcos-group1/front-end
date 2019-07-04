@@ -89,37 +89,44 @@ export default {
           text: 'ads',
           valid: 'asd',
           price: 'asd'
-        },
-        {
-          mname: 'asd',
-          recordTime: 'asd',
-          applyTime: 'asd',
-          author: 'asd',
-          owner: 'asd',
-          phone: 'asd',
-          use: 'asd',
-          location: 'asd',
-          period: 'asd',
-          text: 'ads',
-          valid: 'asd',
-          price: 'asd'
-        },
-        {
-          mname: 'asd',
-          recordTime: 'asd',
-          applyTime: 'asd',
-          author: 'asd',
-          owner: 'asd',
-          phone: 'asd',
-          use: 'asd',
-          location: 'asd',
-          period: 'asd',
-          text: 'ads',
-          valid: 'asd',
-          price: 'asd'
         }
       ]
     }
+  },
+  methods: {},
+  beforeMount() {
+    this.axios
+      .post('/api/receiver', { privateKey: this.$store.state.privateKey })
+      .then(e => {
+        let res = e.data
+        if (res.success === 0) {
+          this.$message.error(res.message)
+          return
+        }
+        let arr = res.data
+        this.notices = []
+        for (let i of arr) {
+          let music = i.music.split('#')
+          let info = i.info.split('#')
+          let tmp = {
+            start: i.start,
+            to: i.to,
+            mname: music[0],
+            author: music[1],
+            recordTime: music[2],
+            orderTime: music[3],
+            owner: info[0],
+            phone: info[1],
+            use: info[2],
+            location: info[3],
+            period: info[4],
+            text: info[5],
+            price: info[6],
+            valid: i.valid
+          }
+          this.notices.push(tmp)
+        }
+      })
   }
 }
 </script>

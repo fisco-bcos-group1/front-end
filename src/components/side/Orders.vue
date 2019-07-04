@@ -18,16 +18,8 @@
       <div class="main">
         <div class="line">
           <div class="item item1">
-            <span class="label">词作者：</span>
-            <span class="value">{{order.author_ci}}</span>
-          </div>
-          <div class="item item2">
-            <span class="label">曲作者：</span>
-            <span class="value">{{order.author_qu}}</span>
-          </div>
-          <div class="item item3">
-            <span class="label">演唱者：</span>
-            <span class="value">{{order.author_si}}</span>
+            <span class="label">作者：</span>
+            <span class="value">{{order.author}}</span>
           </div>
         </div>
         <div class="line">
@@ -52,25 +44,12 @@
 var testList = [
   {
     name: '这是一个作品名称',
-    author_ci: '这是词作者',
-    author_qu: '这是曲作者',
-    author_si: '这是演唱者',
+    author: '这是词作者',
     is_auth: true,
     auth_str: '是',
     price: 1000,
-    order_time: '2019-09-09 13:00',
-    record_time: '2018-09-09 13:00'
-  },
-  {
-    name: '这是一个作品名称',
-    author_ci: '这是词作者',
-    author_qu: '这是曲作者',
-    author_si: '这是演唱者',
-    is_auth: false,
-    auth_str: '否',
-    price: 1000,
-    order_time: '2019-09-09 13:00',
-    record_time: '2018-09-09 11:00'
+    order_time: '2019-09-09',
+    record_time: '2018-09-09'
   }
 ]
 
@@ -79,6 +58,41 @@ export default {
     return {
       orderList: testList
     }
+  },
+  beforeMount() {
+    this.axios
+      .post('/api/orders', { privateKey: this.$store.state.privateKey })
+      .then(e => {
+        let res = e.data
+        if (res.success === 0) {
+          this.$message.error(res.message)
+          return
+        }
+        let arr = res.data
+        this.orderList = []
+        for (let i of arr) {
+          let music = i.music.split('#')
+          let info = i.info.split('#')
+          let tmp = {
+            start: i.start,
+            to: i.to,
+            name: music[0],
+            author: music[1],
+            record_time: music[2],
+            order_time: music[3],
+            owner: info[0],
+            phone: info[1],
+            use: info[2],
+            location: info[3],
+            period: info[4],
+            desc: info[5],
+            price: info[6],
+            is_auth: i.valid,
+            auth_str: i.valid ? '是' : '否'
+          }
+          this.orderList.push(tmp)
+        }
+      })
   }
 }
 </script>

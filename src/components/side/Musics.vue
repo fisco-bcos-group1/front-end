@@ -23,7 +23,7 @@
       <music-detail :detail="detail"></music-detail>
       <div class="title">转让版权人信息</div>
       <div class="item">
-        <span class="label">公钥：</span>
+        <span class="label">地址：</span>
         <el-input class="value" v-model="transferAddress" placeholder="请输入对方地址"></el-input>
       </div>
       <div class="t-btn">
@@ -53,25 +53,15 @@ export default {
       deleteVisible: false,
       tableData: [
         {
-          mname: '王小虎',
-          author: 'XXX',
-          record: '2018-09-09',
-          publish: '2018-09-09'
-        },
-        {
-          mname: '王小虎',
-          author: 'XXX',
-          record: '2018-09-09',
-          publish: '2018-09-09'
-        },
-        {
-          mname: '王小虎',
+          bin: '',
+          mname: 'XXX',
           author: 'XXX',
           record: '2018-09-09',
           publish: '2018-09-09'
         }
       ],
       detail: {
+        bin: '',
         mname: 'XXX ',
         recordTime: 'aaaASAS',
         publishTime: 'AAAA',
@@ -87,24 +77,109 @@ export default {
   },
 
   methods: {
+    setDetail(data) {
+      this.detail.bin = data.bin
+      this.detail.mname = data.mname
+      this.detail.recordTime = data.record
+      this.detail.publishTime = data.publish
+      this.detail.author = data.author
+      this.detail.ownerName = this.$store.state.user.name
+      this.detail.id = this.$store.state.user.id
+      this.detail.location = this.$store.state.user.location
+      this.detail.phone = this.$store.state.user.phone
+      this.detail.email = this.$store.state.user.email
+    },
     handleDetail(index, row) {
-      // to do
       console.log(index, row)
+      this.setDetail(row)
       this.detailVisible = true
     },
     handleTransfer(index, row) {
-      // to do
-      console.log(index, row)
+      this.setDetail(row)
       this.transferVisible = true
     },
     handleDelete(index, row) {
-      // to do
-      console.log(index, row)
+      this.setDetail(row)
       this.deleteVisible = true
     },
     indexMethod(idx) {
       return idx + 1
+    },
+    sureTransfer() {
+      var date = new Date()
+      var datestr =
+        date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+      this.axios
+        .post('/api/transfer', {
+          to: this.transferAddress,
+          bin: this.detail.bin,
+          alltime:
+            this.detail.recordTime +
+            '#' +
+            this.detail.publishTime +
+            '#' +
+            datestr,
+          privateKey: this.$store.state.privateKey
+        })
+        .then(e => {
+          let res = e.data
+          if (res.success === 0) {
+            this.$message.error(res.message)
+            return
+          }
+          this.$message.success(res.message)
+        })
+    },
+    sureDelete() {
+      var date = new Date()
+      var datestr =
+        date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+      this.axios
+        .post('/api/cancel', {
+          bin: this.detail.bin,
+          alltime:
+            this.detail.recordTime +
+            '#' +
+            this.detail.publishTime +
+            '#' +
+            datestr,
+          privateKey: this.$store.state.privateKey
+        })
+        .then(e => {
+          let res = e.data
+          if (res.success === 0) {
+            this.$message.error(res.message)
+            return
+          }
+          this.$message.success(res.message)
+        })
     }
+  },
+  beforeMount() {
+    this.axios
+      .post('/api/musics', { privateKey: this.$store.state.privateKey })
+      .then(e => {
+        let res = e.data
+        if (res.success === 0) {
+          this.$message.error(res.message)
+          return
+        }
+        let arr = res.data
+        this.tableData = []
+        for (let i of arr) {
+          if (!i.isValid) continue
+          let alltime = i.alltime.split('#')
+          let tmp = {
+            bin: i.bin,
+            mname: i.mName,
+            author: i.singer,
+            owner: i.owner,
+            record: alltime[0],
+            publish: alltime[1]
+          }
+          this.tableData.push(tmp)
+        }
+      })
   }
 }
 </script>

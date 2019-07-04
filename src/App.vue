@@ -11,6 +11,24 @@ export default {
   name: 'app',
   components: {
     'head-bar': HeadBar
+  },
+  beforeMount() {
+    var privateKey = localStorage.getItem('privateKey')
+    var userType = localStorage.getItem('userType')
+    var isLogin = localStorage.getItem('isLogin')
+    if (privateKey && userType && isLogin) {
+      this.$store.commit('initSetState', {
+        privateKey: privateKey,
+        isLogin: isLogin,
+        userType: userType
+      })
+      this.axios.post('/api/info', { privateKey: privateKey }).then(e => {
+        let res = e.data
+        if (res.success === 1) {
+          this.$store.commit('setUser', res.data)
+        }
+      })
+    }
   }
 }
 </script>

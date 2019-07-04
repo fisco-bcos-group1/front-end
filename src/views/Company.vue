@@ -5,27 +5,27 @@
       <div class="d-cnt">
         <div class="d-line">
           <div class="label">姓名：</div>
-          <el-input class="value"></el-input>
+          <el-input class="value" v-model="form.name"></el-input>
         </div>
         <div class="d-line">
           <div class="label">企业编号：</div>
-          <el-input class="value"></el-input>
+          <el-input class="value" v-model="form.id"></el-input>
         </div>
         <div class="d-line">
           <div class="label">所在地：</div>
-          <el-input class="value"></el-input>
+          <el-input class="value" v-model="form.location"></el-input>
         </div>
         <div class="d-line">
           <div class="label">联系电话：</div>
-          <el-input class="value"></el-input>
+          <el-input class="value" v-model="form.phone"></el-input>
         </div>
         <div class="d-line">
           <div class="label">电子邮箱：</div>
-          <el-input class="value"></el-input>
+          <el-input class="value" v-model="form.email"></el-input>
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible=false">确定申请</el-button>
+        <el-button type="primary" @click="clickApply">确定申请</el-button>
       </div>
     </el-dialog>
   </div>
@@ -38,7 +38,29 @@ export default {
       dialogVisible: false,
       backgroundDiv: {
         backgroundImage: 'url(' + require('../assets/img/background.jpg') + ')'
+      },
+      form: {
+        id: '',
+        name: '',
+        location: '',
+        email: '',
+        phone: '',
+        privateKey: this.$store.state.privateKey
       }
+    }
+  },
+  methods: {
+    clickApply() {
+      this.axios.post('/api/company', this.form).then(e => {
+        let res = e.data
+        if (res.success === 1) {
+          this.$message.success('认证成功')
+          this.$store.commit('setUserType', 'company')
+        } else {
+          this.$message.error('认证失败,' + res.message)
+        }
+      })
+      this.dialogVisible = false
     }
   }
 }

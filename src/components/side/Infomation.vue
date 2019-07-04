@@ -73,6 +73,14 @@ export default {
       if (this.$store.state.userType === type) return true
       return false
     }
+  },
+  beforeMount() {
+    let user = this.$store.state.user
+    this.name = user.name
+    this.code = user.id
+    this.address = user.location
+    this.phone = user.phone
+    this.email = user.email
   }
 }
 </script>

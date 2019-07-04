@@ -21,15 +21,31 @@
       <div class="register-box">
         <div class="reg-line">
           <div class="label">姓名：</div>
-          <el-input class="myinput" v-model="pwd" placeholder="请输入私钥"></el-input>
+          <el-input class="myinput" v-model="name" placeholder="请输入姓名"></el-input>
         </div>
         <div class="reg-line" style="margin-top:30px">
           <div class="label">电话号码：</div>
-          <el-input class="myinput" v-model="pwd" placeholder="请输入私钥"></el-input>
+          <el-input class="myinput" v-model="phone" placeholder="请输入电话号码"></el-input>
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="clickRegister">注 册</el-button>
+      </div>
+    </el-dialog>
+    <!-- register dialog -->
+    <el-dialog title="用户信息" :visible.sync="showVisible" width="30%" center append-to-body>
+      <div class="register-box">
+        <div class="reg-line">
+          <span class="label">地址：</span>
+          <span>{{show_address}}</span>
+        </div>
+        <div class="reg-line" style="margin-top:30px">
+          <div class="label">私钥：</div>
+          <span>{{show_key}}</span>
+        </div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="showVisible = false">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -41,6 +57,7 @@ export default {
     return {
       loginVisible: false,
       registerVisible: false,
+      showVisible: false,
       pwd: '',
       name: '',
       phone: '',
@@ -48,7 +65,9 @@ export default {
       backgroundDiv: {
         backgroundImage:
           'url(' + require('../../assets/img/background.jpg') + ')'
-      }
+      },
+      show_address: '',
+      show_key: ''
     }
   },
   computed: {
@@ -76,10 +95,47 @@ export default {
     clickLogin() {
       // to do
       this.loginVisible = false
+      this.axios
+        .post('/api/login', { privateKey: this.pwd })
+        .then(res => {
+          res = res.data
+          if (res.success === 0) {
+            this.$message.error('私钥错误')
+          } else {
+            let user = res.data
+            console.log(user)
+            this.$store.commit('initSetState', {
+              privateKey: this.pwd,
+              userType: user.type,
+              isLogin: true
+            })
+            this.$store.commit('setUser', user)
+            this.$router.push('/center/info')
+            this.$message.success('登录成功')
+          }
+        })
+        .catch(e => {
+          this.$message.error('私钥错误')
+        })
     },
     clickRegister() {
       // to do
       this.registerVisible = false
+      this.axios
+        .post('/api/register', { name: this.name, phone: this.phone })
+        .then(res => {
+          if (res.data.success === 0) {
+            this.$message.error('注册失败')
+          } else {
+            this.$message.success('注册成功')
+            this.show_address = res.data.data[0]
+            this.show_key = res.data.data[1]
+            this.showVisible = true
+          }
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
   }
 }
