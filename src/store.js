@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     isLogin: true,
-    userType: 'company' // user,musician,company
+    userType: 'company' // user,musician,company,judge
   },
   mutations: {},
   actions: {}

@@ -63,10 +63,6 @@ export default {
       this.type = item
       this.loginVisible = true
     },
-    clickLogin() {
-      // to do
-      this.loginVisible = false
-    },
     switchToRegister() {
       this.loginVisible = false
       if (this.type === 'musician') {
@@ -76,6 +72,10 @@ export default {
       } else {
         this.registerVisible = true
       }
+    },
+    clickLogin() {
+      // to do
+      this.loginVisible = false
     },
     clickRegister() {
       // to do

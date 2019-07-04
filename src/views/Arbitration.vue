@@ -2,11 +2,11 @@
   <div class="main-cnt">
     <div class="bg"></div>
     <div class="top-right">
-      <div class="tr-btn-box" v-show="showLogin">
+      <div class="tr-btn-box" v-show="!isLogin">
         <div class="tr-btn" @click="loginVisible=true">机构登录</div>
         <div class="tr-btn" @click="registerVisible=true">机构注册</div>
       </div>
-      <div class="tr-name" v-show="!showLogin">XXX机构</div>
+      <div class="tr-name" v-show="isLogin">{{more.name}}</div>
     </div>
     <div class="search-cnt">
       <div class="search-title">查询音乐版权信息</div>
@@ -24,60 +24,76 @@
         <div :class="switchClass(3)" @click="switchItem(3)">机构信息</div>
       </div>
       <div class="cnts">
-        <div class="copyright-box">
-          <div class="--box">
-            <div class="title">登记信息</div>
-            <div class="line">
+        <div v-if="isLogin">
+          <div class="copyright-box" v-show="isShowBox(1)">
+            <div class="--box">
+              <div class="title">登记信息</div>
+              <div class="line">
+                <div class="item">
+                  <span class="label">作品名称：</span>
+                  <span class="value">{{music.name}}</span>
+                </div>
+                <div class="item">
+                  <span class="label">登记时间：</span>
+                  <span class="value">{{music.publish_time}}</span>
+                </div>
+                <div class="item">
+                  <span class="label">录制时间：</span>
+                  <span class="value">{{music.record_time}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="--box">
+              <div class="title">作者信息</div>
               <div class="item">
-                <span class="label">作品名称：</span>
-                <span class="value">{{music.name}}</span>
+                <span class="label">作者：</span>
+                <span class="value">{{music.author}}</span>
+              </div>
+            </div>
+            <div class="--box">
+              <div class="title">版权人信息</div>
+              <div class="line">
+                <div class="item">
+                  <span class="label">姓名：</span>
+                  <span class="value">{{music.owner}}</span>
+                </div>
+                <div class="item">
+                  <span class="label">身份证号码：</span>
+                  <span class="value">{{music.code}}</span>
+                </div>
               </div>
               <div class="item">
-                <span class="label">登记时间：</span>
-                <span class="value">{{music.publish_time}}</span>
+                <span class="label">所在地：</span>
+                <span class="value">{{music.address}}</span>
               </div>
-              <div class="item">
-                <span class="label">录制时间：</span>
-                <span class="value">{{music.record_time}}</span>
+              <div class="line">
+                <div class="item">
+                  <span class="label">联系电话：</span>
+                  <span class="value">{{music.phone}}</span>
+                </div>
+                <div class="item">
+                  <span class="label">电子邮箱：</span>
+                  <span class="value">{{music.email}}</span>
+                </div>
               </div>
             </div>
           </div>
-          <div class="--box">
-            <div class="title">作者信息</div>
+          <div class="history-box" v-show="isShowBox(2)">暂无</div>
+          <div class="info-box" v-show="isShowBox(3)">
             <div class="item">
-              <span class="label">作者：</span>
-              <span class="value">{{music.author}}</span>
-            </div>
-          </div>
-          <div class="--box">
-            <div class="title">版权人信息</div>
-            <div class="line">
-              <div class="item">
-                <span class="label">姓名：</span>
-                <span class="value">{{music.owner}}</span>
-              </div>
-              <div class="item">
-                <span class="label">身份证号码：</span>
-                <span class="value">{{music.code}}</span>
-              </div>
+              <span>机构名称：</span>
+              <span>{{more.name}}</span>
             </div>
             <div class="item">
-              <span class="label">所在地：</span>
-              <span class="value">{{music.address}}</span>
+              <span>所在地：</span>
+              <span>{{more.location}}</span>
             </div>
-            <div class="line">
-              <div class="item">
-                <span class="label">联系电话：</span>
-                <span class="value">{{music.phone}}</span>
-              </div>
-              <div class="item">
-                <span class="label">电子邮箱：</span>
-                <span class="value">{{music.email}}</span>
-              </div>
+            <div class="item">
+              <span>联系方式：</span>
+              <span>{{more.phone}}</span>
             </div>
           </div>
         </div>
-        <div class="history-box"></div>
       </div>
     </div>
 
@@ -145,7 +161,19 @@ export default {
         location: '',
         phone: '',
         email: ''
+      },
+      more: {
+        name: 'XXX机构',
+        location: 'XXX',
+        phone: 'XXXXX'
       }
+    }
+  },
+  computed: {
+    isLogin() {
+      if (this.$store.state.isLogin && this.$store.state.userType === 'judge')
+        return true
+      return false
     }
   },
   methods: {
@@ -157,8 +185,13 @@ export default {
       if (this.active === type) return 'switch-item switch-item-active'
       return 'switch-item'
     },
+    isShowBox(item) {
+      if (this.active === item) return true
+      return false
+    },
     clickSearch() {
       // to do
+      if (!this.isLogin) this.$message.error('请先登录')
     },
     clickLogin() {
       // to do
@@ -203,7 +236,7 @@ export default {
       margin-top: 10px;
       border-radius: 8px;
       cursor: pointer;
-      border: 1px solid #909399;
+      border: 1px solid #b7b7b7;
       noselect();
 
       &:hover {
@@ -241,6 +274,7 @@ export default {
   margin: 50px auto;
   background-color: #fefefe;
   border-radius: 8px;
+  min-height: 360px;
 
   .switch-box {
     width: 360px;
@@ -299,6 +333,15 @@ export default {
       width: 250px;
       margin-top: 8px;
     }
+  }
+}
+
+.info-box {
+  margin-top: 80px;
+  margin-left: 30px;
+
+  .item {
+    margin-top: 30px;
   }
 }
 

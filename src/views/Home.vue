@@ -7,7 +7,7 @@
       <el-button plain type="success" icon="el-icon-search" circle @click="clickSearch"></el-button>
     </div>
 
-    <div class="show-box">
+    <div class="show-box" v-show="isShow">
       <div class="title">音乐信息</div>
       <div class="music">
         <div class="line">
@@ -115,6 +115,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      isShow: false,
       backgroundDiv: {
         backgroundImage: 'url(' + require('../assets/img/background.jpg') + ')'
       },
@@ -137,6 +138,7 @@ export default {
   methods: {
     clickSearch() {
       // To do
+      this.isShow = true
     },
     clickApply() {
       // To do
