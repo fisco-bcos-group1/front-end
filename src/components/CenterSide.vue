@@ -3,6 +3,7 @@
     <div v-for="(item, idx) in sideList" :key="idx">
       <div :class="calOptionStyle(idx)" @click="clickOption(item,idx)">{{item.title}}</div>
     </div>
+    <div class="option" @click="logout">退出登录</div>
   </div>
 </template>
 
@@ -59,6 +60,10 @@ export default {
       if (this.active === idx) return
       this.active = idx
       this.$router.push(item.path)
+    },
+    logout() {
+      this.$store.commit('logout')
+      this.$router.push('/login')
     }
   },
   beforeMount() {

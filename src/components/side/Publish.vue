@@ -151,7 +151,7 @@ export default {
             '#' +
             this.form.publish_time
         }
-        this.axios.post('/api/pubilsh', req).then(res => {
+        this.axios.post('/api/publish', req).then(res => {
           if (res.data.success === 1) {
             this.$message.success('登记成功')
           } else {

@@ -230,10 +230,11 @@ export default {
             this.$message.error('私钥错误')
           } else {
             let user = res.data
-            // localStorage.setItem('privateKey', this.pwd)
-            // localStorage.setItem('userType', user.kind)
-            // localStorage.setItem('isLogin', true)
-            // localStorage.setItem('user', user)
+            this.$store.commit('initSetState', {
+              privateKey: this.privateKey,
+              userType: user.type,
+              isLogin: true
+            })
             this.$store.commit('setUserType', user.kind)
             this.$store.commit('setUser', user)
             this.more.name = user.name

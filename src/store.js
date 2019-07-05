@@ -25,6 +25,14 @@ export default new Vuex.Store({
     },
     setUserType(state, type) {
       state.userType = type
+      localStorage.setItem('userType', type)
+    },
+    logout(state) {
+      state.isLogin = false
+      state.userType = 'user'
+      localStorage.removeItem('privateKey')
+      localStorage.removeItem('isLogin')
+      localStorage.removeItem('userType')
     }
   },
   actions: {}

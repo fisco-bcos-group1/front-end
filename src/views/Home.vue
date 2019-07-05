@@ -11,19 +11,21 @@
       <div class="title">音乐信息</div>
       <div class="music">
         <div class="line">
-          <span class="label">作品名称：</span>
-          <span class="value">{{music.name}}</span>
+          <div class="item">
+            <span class="label">作品名称：</span>
+            <span class="value">{{music.name}}</span>
+          </div>
+          <div class="item">
+            <span class="label">作&emsp;者：</span>
+            <span class="value">{{music.author}}</span>
+          </div>
         </div>
-        <div class="line">
-          <span class="label">作&emsp;者：</span>
-          <span class="value">{{music.author}}</span>
-        </div>
-        <div class="line">
-          <span class="label">版权人：</span>
+        <div class="item2">
+          <span class="label">版权人地址：</span>
           <span class="value">{{music.owner}}</span>
         </div>
       </div>
-      <div class="apply-btn" @click="clickApply">申请授权</div>
+      <div class="apply-btn" @click="dialogVisible=true">申请授权</div>
     </div>
 
     <el-dialog
@@ -101,7 +103,7 @@
           </div>
         </div>
         <div class="dialog-footer">
-          <el-button type="primary" @click="dialogVisible=false">确定申请授权</el-button>
+          <el-button type="primary" @click="clickApply">确定申请授权</el-button>
         </div>
       </div>
     </el-dialog>
@@ -150,7 +152,8 @@ export default {
           .then(e => {
             let res = e.data
             let music = res.data
-            if (res.success === 1 && music.valid) {
+            console.log(music)
+            if (res.success === 1) {
               this.isShow = true
               this.music.bin = music.bin
               this.music.name = music.mName
@@ -189,7 +192,7 @@ export default {
         if (res.success === 1) this.$message.success(res.message)
         else this.$message.error(res.message)
       })
-      this.dialogVisible = true
+      this.dialogVisible = false
     }
   }
 }
@@ -243,11 +246,19 @@ export default {
   }
 
   .music {
-    display: flex;
-    justify-content: space-between;
-
     .line {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .item {
       width: 225px;
+      font-size: 1rem;
+      color: #303133;
+    }
+
+    .item2 {
+      margin-top: 20px;
       font-size: 1rem;
       color: #303133;
     }

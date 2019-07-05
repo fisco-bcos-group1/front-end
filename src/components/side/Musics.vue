@@ -160,6 +160,7 @@ export default {
       .post('/api/musics', { privateKey: this.$store.state.privateKey })
       .then(e => {
         let res = e.data
+        console.log(res)
         if (res.success === 0) {
           this.$message.error(res.message)
           return
@@ -167,7 +168,7 @@ export default {
         let arr = res.data
         this.tableData = []
         for (let i of arr) {
-          if (!i.isValid) continue
+          if (!i.valid) continue
           let alltime = i.alltime.split('#')
           let tmp = {
             bin: i.bin,

@@ -99,6 +99,7 @@ export default {
       .post('/api/receiver', { privateKey: this.$store.state.privateKey })
       .then(e => {
         let res = e.data
+        console.log(res)
         if (res.success === 0) {
           this.$message.error(res.message)
           return

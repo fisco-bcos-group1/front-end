@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     clickApply() {
-      this.axios.post('/api/company', this.form).then(e => {
+      this.axios.post('/api/company1', this.form).then(e => {
         let res = e.data
         if (res.success === 1) {
           this.$message.success('认证成功')
