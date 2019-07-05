@@ -198,7 +198,7 @@ export default {
         return
       }
       this.axios
-        .post('/api/judge/search', {
+        .post('/api/judgesearch', {
           musicname: this.musicName,
           singer: this.musicAuthor,
           privateKey: this.$store.state.privateKey
@@ -250,7 +250,7 @@ export default {
     },
     clickRegister() {
       // to do
-      this.axios.post('/api/judge/apply', this.register).then(e => {
+      this.axios.post('/api/judgeapply', this.register).then(e => {
         let res = e.data
         if (res.success === 1) {
           this.$message.success('认证成功')
