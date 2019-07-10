@@ -106,10 +106,11 @@ export default {
             console.log(user)
             this.$store.commit('initSetState', {
               privateKey: this.pwd,
-              userType: 'judge',
+              userType: user.type,
               isLogin: true
             })
             this.$store.commit('setUser', user)
+            this.$router.push('/center/info')
             this.$message.success('登录成功')
           }
         })

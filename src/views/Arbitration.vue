@@ -232,7 +232,7 @@ export default {
             let user = res.data
             this.$store.commit('initSetState', {
               privateKey: this.privateKey,
-              userType: user.type,
+              userType: 'judge',
               isLogin: true
             })
             this.$store.commit('setUserType', user.kind)
